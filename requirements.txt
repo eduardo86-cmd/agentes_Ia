@@ -1,0 +1,2 @@
+fly secrets set SECRET_KEY=clave-segura-larga-aqui
+fly secrets set ANTHROPIC_API_KEY=sk-ant-xxxxx
