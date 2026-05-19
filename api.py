@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import pandas as pd
+
+df = pd.read_csv("data/dataset fisikapp.csv")
 
 app = FastAPI()
 
@@ -24,34 +27,31 @@ def inicio():
 
 @app.post("/generar-contenido")
 def generar_contenido(datos: DatosEntrada):
-    resumen = (
-        f"El laboratorio '{datos.titulo}' pertenece a la categoría de {datos.categoria}. "
-        f"Su objetivo principal es {datos.objetivo}. "
-        f"Se abordarán conceptos relacionados con {datos.palabras_clave}."
-    )
 
-    prologo = (
-        f"El presente trabajo '{datos.titulo}' se desarrolla en el área de {datos.categoria}, "
-        f"con el propósito de fortalecer el análisis y comprensión del tema. "
-        f"A partir del objetivo planteado, se busca explicar de manera clara los conceptos asociados a "
-        f"{datos.palabras_clave}."
-    )
+    fila_encontrada = None
 
-    marco_teorico = (
-        f"El marco teórico del laboratorio '{datos.titulo}' se fundamenta en la categoría de {datos.categoria}. "
-        f"Para cumplir el objetivo de {datos.objetivo}, se consideran conceptos clave como "
-        f"{datos.palabras_clave}. Estos elementos permiten comprender las bases del tema, "
-        f"su importancia y su aplicación dentro del contexto académico."
-    )
+    for _, fila in df.iterrows():
 
-    introduccion = (
-        f"En el laboratorio '{datos.titulo}' se aborda la temática de {datos.categoria}. "
-        f"Este trabajo busca {datos.objetivo}, explorando conceptos como {datos.palabras_clave}."
-    )
+        categoria_csv = str(fila["categoria"]).lower()
+
+        if categoria_csv == datos.categoria.lower():
+            fila_encontrada = fila
+            break
+
+    if fila_encontrada is not None:
+
+        resumen = fila_encontrada["resumen"]
+        introduccion = fila_encontrada["introduccion"]
+        marco_teorico = fila_encontrada["marco_teorico"]
+
+    else:
+
+        resumen = "No se encontró información."
+        introduccion = ""
+        marco_teorico = ""
 
     return {
         "resumen": resumen,
-        "prologo": prologo,
         "introduccion": introduccion,
         "marco_teorico": marco_teorico
     }
