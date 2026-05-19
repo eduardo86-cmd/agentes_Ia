@@ -16,6 +16,7 @@ class DatosEntrada(BaseModel):
     categoria: str
     objetivo: str
     palabras_clave: str
+    titulo: str = ""
 
 @app.get("/")
 def inicio():
@@ -24,28 +25,34 @@ def inicio():
 @app.post("/generar-contenido")
 def generar_contenido(datos: DatosEntrada):
     resumen = (
-        f"Este proyecto pertenece a la categoría de {datos.categoria}. "
+        f"El laboratorio '{datos.titulo}' pertenece a la categoría de {datos.categoria}. "
         f"Su objetivo principal es {datos.objetivo}. "
         f"Se abordarán conceptos relacionados con {datos.palabras_clave}."
     )
 
     prologo = (
-        f"El presente trabajo se desarrolla en el área de {datos.categoria}, "
+        f"El presente trabajo '{datos.titulo}' se desarrolla en el área de {datos.categoria}, "
         f"con el propósito de fortalecer el análisis y comprensión del tema. "
         f"A partir del objetivo planteado, se busca explicar de manera clara los conceptos asociados a "
         f"{datos.palabras_clave}."
     )
 
     marco_teorico = (
-        f"El marco teórico de este proyecto se fundamenta en la categoría de {datos.categoria}. "
+        f"El marco teórico del laboratorio '{datos.titulo}' se fundamenta en la categoría de {datos.categoria}. "
         f"Para cumplir el objetivo de {datos.objetivo}, se consideran conceptos clave como "
         f"{datos.palabras_clave}. Estos elementos permiten comprender las bases del tema, "
         f"su importancia y su aplicación dentro del contexto académico."
     )
 
+    introduccion = (
+        f"En el laboratorio '{datos.titulo}' se aborda la temática de {datos.categoria}. "
+        f"Este trabajo busca {datos.objetivo}, explorando conceptos como {datos.palabras_clave}."
+    )
+
     return {
         "resumen": resumen,
         "prologo": prologo,
+        "introduccion": introduccion,
         "marco_teorico": marco_teorico
     }
 
