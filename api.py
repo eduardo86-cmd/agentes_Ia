@@ -15,8 +15,8 @@ app.add_middleware(
 class DatosEntrada(BaseModel):
     categoria: str
     objetivo: str
-    palabras_clave: str
-    titulo: str = ""
+    palabras_clave: str = ""
+    titulo: str 
 
 @app.get("/")
 def inicio():
