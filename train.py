@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
-df = pd.read_csv("data/dataset fisikapp - Hoja 1 (2).csv")
+df = pd.read_csv("data/dataset fisikapp.csv")
 
 df = df.dropna(subset=["categoria", "palabras-clave"])
 
