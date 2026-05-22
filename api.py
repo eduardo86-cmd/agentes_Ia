@@ -5,13 +5,21 @@ import pandas as pd
 import unicodedata
 from rapidfuzz import fuzz
 
+df = pd.read_csv("data/dataset fisikapp.csv")
+
+df.columns = (
+    df.columns
+    .str.strip()
+    .str.lower()
+)
+
+print(df.columns.tolist())
+
 def limpiar_texto(texto):
     texto = str(texto).lower()
     texto = unicodedata.normalize("NFKD", texto)
     texto = texto.encode("ascii", "ignore").decode("utf-8")
     return texto.strip()
-
-df = pd.read_csv("data/dataset fisikapp.csv")
 
 app = FastAPI()
 
@@ -67,4 +75,45 @@ def generar_contenido(datos: DatosEntrada):
         "introduccion": introduccion,
         "marco_teorico": marco_teorico,
         "coincidencia": mejor_score
+    }
+
+
+@app.post("/generar-actividades")
+def generar_actividades(datos: DatosEntrada):
+    return {
+        "actividades": [
+            {
+                "nivel": "básico",
+                "descripcion": f"Actividad básica sobre {datos.titulo}, enfocada en reconocer conceptos principales de {datos.categoria}."
+            },
+            {
+                "nivel": "intermedio",
+                "descripcion": f"Actividad práctica sobre {datos.categoria}, aplicando el objetivo: {datos.objetivo}."
+            },
+            {
+                "nivel": "avanzado",
+                "descripcion": f"Actividad de análisis avanzado relacionada con {datos.titulo}, usando palabras clave: {datos.palabras_clave}."
+            }
+        ]
+    }
+
+
+@app.post("/generar-detalle-actividad")
+def generar_detalle_actividad(datos: DatosEntrada):
+    return {
+        "objetivo_especifico": f"Aplicar los conceptos de {datos.categoria} mediante una actividad práctica relacionada con {datos.titulo}.",
+        "materiales": [
+            "Cuaderno",
+            "Lápiz",
+            "Calculadora",
+            "Guía de laboratorio"
+        ],
+        "procedimiento": [
+            "Leer la actividad.",
+            "Preparar materiales.",
+            "Realizar el procedimiento.",
+            "Registrar resultados."
+        ],
+        "formula": "Según el tema trabajado",
+        "tiempo_estimado": "30 a 45 minutos"
     }

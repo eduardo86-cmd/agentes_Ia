@@ -4,3 +4,4 @@ python-jose[cryptography]
 python-dotenv
 scikit-learn
 pandas
+rapidfuzz
