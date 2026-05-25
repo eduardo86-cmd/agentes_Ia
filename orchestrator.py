@@ -1,19 +1,21 @@
-from agents.input_agent import InputAgent
-from agents.model_agent import ModelAgent
-from agents.output_agent import OutputAgent
+from agents.input_agent import preparar_entrada
+from agents.model_agent import buscar_contexto
+from agents.output_agent import (
+    formatear_contenido,
+    formatear_actividades,
+    formatear_detalle
+)
 
-class Orchestrator:
-    def __init__(self):
-        self.input_agent = InputAgent()
-        self.model_agent = ModelAgent("models/trained_model.pkl")
-        self.output_agent = OutputAgent()
+def generar_contenido_orquestado(datos):
+    datos_limpios = preparar_entrada(datos)
+    fila, score = buscar_contexto(datos_limpios["categoria"],datos_limpios["titulo"],
+    datos_limpios["objetivo"])
+    return formatear_contenido(fila,score)
 
-    def run(self, user_input: str):
-        processed = self.input_agent.process(user_input)
-        prediction = self.model_agent.predict(processed)
-        result = self.output_agent.format(prediction)
-        return result
+def generar_actividades_orquestado(datos):
+    datos_limpios=preparar_entrada(datos)
+    return formatear_actividades(datos_limpios)
 
-if __name__ == "__main__":
-    orchestrator = Orchestrator()
-    print(orchestrator.run("Hola mundo"))
+def generar_detalle_orquestado(datos):
+    datos_limpios =preparar_entrada(datos)
+    return formatear_detalle(datos_limpios)
