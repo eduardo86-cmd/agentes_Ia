@@ -1,4 +1,4 @@
-def formatear_contenido(fila, score):
+def formatear_contenido(fila, score,datos_limpios):
     if fila is None:
         return{
             "resumen":"No se encontro informacion.",
@@ -9,6 +9,9 @@ def formatear_contenido(fila, score):
         }
 
     return{
+        "titulo": datos_limpios["titulo"],
+        "categoria": datos_limpios["categoria"],
+        "objetivo": datos_limpios["objetivo"],
         "resumen":fila.get("resumen",""),
         "introduccion":fila.get("introduccion",""),
         "marco_teorico":fila.get("marco_teorico",""),

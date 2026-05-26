@@ -1,36 +1,74 @@
 from agents.input_agent import preparar_entrada
 from agents.model_agent import buscar_contexto
+from agents.groq_agent import (generar_detalle_con_groq, generar_actividades_con_groq,generar_contenido_con_groq)
 from agents.output_agent import (
     formatear_contenido,
-    formatear_actividades,
-    formatear_detalle
+    formatear_actividades
 )
-from agents.validator_agent import validar_y_mejorar
 
 def generar_contenido_orquestado(datos):
     datos_limpios = preparar_entrada(datos)
+
     fila, score = buscar_contexto(
         datos_limpios["categoria"],
         datos_limpios["titulo"],
         datos_limpios["objetivo"]
-        )
-    contenido = formatear_contenido(fila, score, datos_limpios)
-    return validar_y_mejorar(contenido, datos_limpios)
+    )
+
+    if fila is None:
+        return {
+            "error": "No se encontró contexto suficiente en el dataset."
+        }
+
+    contexto = {
+        "resumen": fila.get("resumen", ""),
+        "introduccion": fila.get("introduccion", ""),
+        "marco_teorico": fila.get("marco_teorico", "")
+    }
+
+    return generar_contenido_con_groq(datos_limpios, contexto)
 
 def generar_actividades_orquestado(datos):
-    datos_limpios=preparar_entrada(datos)
+    datos_limpios = preparar_entrada(datos)
+
     fila, score = buscar_contexto(
         datos_limpios["categoria"],
         datos_limpios["titulo"],
         datos_limpios["objetivo"]
     )
-    return formatear_actividades(datos_limpios,fila)
+
+    if fila is None:
+        return {
+            "error": "No se encontró contexto suficiente en el dataset."
+        }
+
+    contexto = {
+        "resumen": fila.get("resumen", ""),
+        "introduccion": fila.get("introduccion", ""),
+        "marco_teorico": fila.get("marco_teorico", "")
+    }
+
+    return generar_actividades_con_groq(datos_limpios, contexto)
 
 def generar_detalle_orquestado(datos):
-    datos_limpios =preparar_entrada(datos)
+    datos_limpios = preparar_entrada(datos)
+
     fila, score = buscar_contexto(
         datos_limpios["categoria"],
         datos_limpios["titulo"],
         datos_limpios["objetivo"]
     )
-    return formatear_detalle(datos_limpios,fila)
+
+    if fila is None:
+        return {
+            "error": "No se encontró contexto suficiente en el dataset."
+        }
+
+    contexto = {
+        "resumen": fila.get("resumen", ""),
+        "introduccion": fila.get("introduccion", ""),
+        "marco_teorico": fila.get("marco_teorico", "")
+    }
+
+    return generar_detalle_con_groq(datos_limpios, contexto)
+
