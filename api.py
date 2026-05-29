@@ -1,6 +1,15 @@
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from agents.image_agent import generar_imagen
+from fastapi.responses import Response
+from io import BytesIO
+
+
+
+
 
 from orchestrator import(
     generar_contenido_orquestado,
@@ -45,3 +54,28 @@ def generar_actividades(datos: DatosEntrada):
 @app.post("/generar-detalle-actividad")
 def generar_detalle_actividad(datos: DatosEntrada):
     return generar_detalle_orquestado(datos.dict())
+
+
+from io import BytesIO
+
+@app.post("/generar-imagen")
+def generar_imagen_endpoint(datos: dict):
+
+    prompt = f"""
+Educational physics illustration.
+Simple electric circuit diagram with battery, resistor, wires and multimeter.
+No text, no letters, no words, no watermark.
+Clean white background.
+Clear components.
+Classroom laboratory style.
+
+Activity:
+{datos['descripcion']}
+"""
+
+    imagen = generar_imagen(prompt)
+
+    return Response(
+        content=imagen,
+        media_type="image/png"
+    )

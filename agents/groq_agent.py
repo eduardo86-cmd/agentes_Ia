@@ -13,6 +13,9 @@ Eres un asistente académico de física para Fisikapp.
 
 Usa únicamente este contexto del dataset:
 
+Genera entre 2 y 5 fórmulas relacionadas con la actividad si el contexto lo permite.
+Cada fórmula debe tener nombre, descripción y expresión.
+
 Resumen:
 {contexto.get("resumen", "")}
 
@@ -29,14 +32,18 @@ Objetivo: {datos.get("objetivo", "")}
 Nivel: {datos.get("nivel", "")}
 Descripción: {datos.get("descripcion", "")}
 
-Genera el detalle de la actividad.
-
 Responde SOLO JSON válido con esta estructura:
 {{
   "objetivo_especifico": "",
   "materiales": [],
   "procedimiento": [],
-  "formula": "",
+  "formulas": [
+    {{
+      "nombre": "",
+      "descripcion": "",
+      "expresion": ""
+    }}
+  ],
   "tiempo_estimado": ""
 }}
 """
@@ -160,12 +167,29 @@ Genera únicamente:
 - introduccion
 - marco_teorico
 
+Además genera una lista de conceptos básicos relacionados con el tema.
+Cada concepto debe incluir:
+- concepto
+- descripcion
+- ejemplo
+- tipo
+
+El tipo puede ser: "teorico", "formula", "unidad", "instrumento" o "fenomeno".
+
 Formato:
 {{
   "prologo": "",
   "resumen": "",
   "introduccion": "",
-  "marco_teorico": ""
+  "marco_teorico": "",
+  "conceptos_basicos": [
+    {{
+      "concepto": "",
+      "descripcion": "",
+      "ejemplo": "",
+      "tipo": ""
+    }}
+  ]
 }}
 """
 
@@ -187,3 +211,34 @@ Formato:
     texto = response.choices[0].message.content
 
     return json.loads(texto)
+
+
+
+def generar_prompt_imagen(datos):
+
+    return f"""
+    ilustracion educativa.
+    tema:
+    {datos.get("titulo","")}
+
+    categoria:
+    {datos.get("categoria","")}
+
+    Nivel :
+    {datos.get("nivel","")}
+
+    Actividad:
+    {datos.get("descripcion","")}
+
+    Estilo:
+    -educativo
+    -cientifico
+    -moderno 
+    -laboratorio fisico
+    -alta calidad
+    -iluminacion profesional
+    -diagramas claros
+    
+    """
+
+
