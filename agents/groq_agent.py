@@ -99,11 +99,14 @@ REGLAS OBLIGATORIAS:
 - Usa únicamente el contexto del dataset y los datos entregados.
 - No inventes conceptos que no estén relacionados con el tema.
 - No agregues fórmulas si el contexto no permite justificarlas.
-- Si no hay suficientes fórmulas, devuelve "formulas": [].
 - El procedimiento debe ser claro, práctico y ordenado.
 - Los materiales deben ser realistas para una actividad escolar.
 - El lenguaje debe ser adecuado para estudiantes.
 - El tiempo estimado debe ser breve y realista.
+- Genera entre 3 y 5 fórmulas relacionadas con la actividad cuando el tema lo permita.
+- Para electricidad incluye Ley de Ohm, Potencia Eléctrica y despejes relevantes.
+- Para mecánica incluye las ecuaciones fundamentales relacionadas con la práctica.
+- Solo devuelve formulas vacías si realmente no existe ninguna fórmula asociada al tema.
 
 {construir_contexto(contexto)}
 
@@ -118,6 +121,16 @@ ESTRUCTURA EXACTA:
   "materiales": [],
   "procedimiento": [],
   "formulas": [
+    {{
+      "nombre": "",
+      "descripcion": "",
+      "expresion": ""
+    }},
+    {{
+      "nombre": "",
+      "descripcion": "",
+      "expresion": ""
+    }},
     {{
       "nombre": "",
       "descripcion": "",

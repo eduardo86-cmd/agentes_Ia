@@ -10,8 +10,9 @@ def limpiar_texto(texto):
 
 def preparar_entrada(datos):
     return{
+        "laboratorio_id": datos.get("laboratorio_id"),
         "categoria":limpiar_texto(datos.get("categoria","")),
-        "objetivo":datos.get("objetivos",""),
+        "objetivo":datos.get("objetivo",""),
         "palabras_clave":datos.get("palabras_clave",""),
         "titulo":datos.get("titulo",""),
         "resumen":datos.get("resumen",""),
