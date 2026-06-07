@@ -9,3 +9,4 @@ groq
 requests
 huggingface_hub
 pillow
+openai
