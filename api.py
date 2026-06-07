@@ -6,11 +6,6 @@ from pydantic import BaseModel
 from fastapi.responses import Response
 
 
-
-
-
-
-
 from orchestrator import(
     generar_contenido_orquestado,
     generar_actividades_orquestado,

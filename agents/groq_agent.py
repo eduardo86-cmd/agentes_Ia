@@ -90,6 +90,7 @@ def pedir_groq_texto(prompt, temperature=0.2):
 
 
 def generar_detalle_con_groq(datos, contexto):
+    
     prompt = f"""
 Eres un asistente académico especializado en física escolar para Fisikapp.
 
@@ -140,6 +141,7 @@ ESTRUCTURA EXACTA:
   "tiempo_estimado": ""
 }}
 """
+    
 
     return pedir_groq_json(prompt, temperature=0.2)
 
@@ -280,7 +282,7 @@ Activity:
 {datos.get("descripcion", "")}
 
 Visual style:
-Educational physics infographic, realistic school laboratory equipment, clean white background, scientific composition, clear arrows only if needed, high quality, textbook style.
+Flat vector illustration, colorful educational infographic, cartoon science laboratory, cute student scientist, simple geometric shapes, bright colors, clean vector design, educational poster style, children textbook illustration, modern 2D flat design, icon-based laboratory elements, friendly character, high quality vector art.
 
 Restrictions:
 Only show the physics experiment. No people, no hands, no animals, no fish, no pencils, no books, no notebooks, no decorative objects, no unrelated cables, no unrelated generators, no table, no graph, no text, no labels, no letters, no numbers.
@@ -313,12 +315,10 @@ MANDATORY RULES:
 - Do not use markdown.
 - Describe only what should appear in the image.
 - Represent only the physics experiment.
-- Use realistic school laboratory instruments.
+
 - Use a clean white background.
-- Use an educational physics textbook illustration style.
+
 - Use clear arrows only if they represent a physical phenomenon.
-- Do not mention or show people.
-- Do not mention or show hands.
 - Do not mention or show fingers.
 - Do not mention or show animals.
 - Do not mention or show fish.
@@ -327,8 +327,15 @@ MANDATORY RULES:
 - Do not mention or show notebooks.
 - Do not mention or show decorative objects.
 - Do not mention tables or graphs.
-- Do not include text, labels, letters or numbers inside the image.
 - Do not mix Spanish words into the final prompt.
+- Show friendly cartoon student scientists.
+- Use colorful infographic elements.
+- Use a vertical educational poster layout.
+- Do not include text, labels, letters or numbers inside the image.
+- Use colorful cartoon laboratory instruments.
+- Use modern flat vector educational illustration style.
+- Use child-friendly science poster style.
+
 """
 
     return pedir_groq_texto(prompt, temperature=0.1)
@@ -368,7 +375,10 @@ MANDATORY RULES:
 - Show measurement instruments related to the activity.
 - Show visual arrows only if they represent motion, force, heat, light or electric current.
 - Use a clean white background.
-- Use an educational physics textbook illustration style.
+- Use modern flat vector illustration style.
+- Use colorful cartoon educational science style.
+- Use simple geometric shapes.
+- Use friendly student scientist characters.
 - Make it scientifically correct.
 - Do not add decorative objects.
 - Do not show people.
@@ -394,14 +404,9 @@ MANDATORY RULES:
 
 def limpiar_prompt_visual(prompt):
     palabras_prohibidas = [
-        "hand",
-        "hands",
+        
         "finger",
         "fingers",
-        "person",
-        "people",
-        "student",
-        "students",
         "fish",
         "animal",
         "animals",
@@ -437,10 +442,107 @@ def generar_prompt_final_para_imagen(datos, contexto=None, detalle=None):
     prompt_final = limpiar_prompt_visual(prompt_final)
 
     restricciones = (
-        " Only show the physics experiment. "
-        "No people, no hands, no fingers, no animals, no fish, no pencils, "
-        "no books, no notebooks, no decorative objects, no table, no graph, "
-        "no text, no labels, no letters, no numbers."
-    )
+    " Educational physics infographic. "
+    "Show the experiment procedure visually. "
+    "Use colorful cartoon vector style. "
+    "Show the sequence of steps through images only. "
+    "No text. "
+    "No labels. "
+    "No letters. "
+    "No numbers. "
+    "Flat 2D educational illustration. "
+    "Child-friendly science poster. "
+    "Not realistic. "
+    "Not photographic."
+)
 
     return f"{prompt_final} {restricciones}".strip()
+
+
+def filtrar_pasos_visuales(procedimiento):
+    palabras_no_visuales = [
+        "registra",
+        "registrar",
+        "calcula",
+        "calcular",
+        "analiza",
+        "analizar",
+        "discute",
+        "discutir",
+        "gráfico",
+        "grafico",
+        "tabla",
+        "fórmula",
+        "formula",
+        "conclusión",
+        "conclusion",
+        "resultados"
+    ]
+
+    pasos_visuales = []
+
+    for paso in procedimiento:
+        paso_lower = paso.lower()
+
+        if not any(palabra in paso_lower for palabra in palabras_no_visuales):
+            pasos_visuales.append(paso)
+
+    return pasos_visuales
+
+def generar_prompt_desde_pasos_visuales(datos, pasos_visuales):
+
+    pasos_texto = "\n".join(
+        [f"Scene {i+1}: {paso}" for i, paso in enumerate(pasos_visuales)]
+    )
+
+    prompt = f"""
+Create a modern flat vector educational science illustration.
+
+Physics topic:
+{datos.get("titulo", "")}
+
+Activity:
+{datos.get("descripcion", "")}
+
+Show the procedure visually using these scenes:
+{pasos_texto}
+
+Visual style:
+modern flat vector illustration,
+minimal cartoon science lab,
+simple student characters,
+simple laboratory equipment,
+soft shadows,
+rounded geometric shapes,
+clean white background,
+turquoise, coral, yellow and dark blue color palette,
+professional educational poster style,
+friendly school science design,
+not realistic,
+not photographic,
+not 3D render.
+
+
+Modern 3D educational physics simulation.
+Virtual laboratory environment.
+Semi-realistic scientific equipment.
+Interactive STEM learning platform style.
+Professional educational visualization.
+Clean futuristic laboratory.
+Digital measurement interface overlays.
+Blue technology background.
+High-quality 3D render.
+Scientific visualization.
+Realistic materials and lighting.
+Modern educational software appearance.
+
+Rules:
+No text paragraphs.
+Minimal interface elements only.
+Show measurements through digital indicators.
+Focus on laboratory equipment.
+Show only the experiment procedure.
+Professional educational simulation style.
+"""
+
+    return prompt.strip()
