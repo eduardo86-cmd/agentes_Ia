@@ -10,14 +10,23 @@ MODEL = "llama-3.1-8b-instant"
 def parsear_json_seguro(texto):
     try:
         return json.loads(texto)
+
     except json.JSONDecodeError:
         inicio = texto.find("{")
         fin = texto.rfind("}") + 1
 
         if inicio == -1 or fin <= inicio:
-            raise ValueError(f"La respuesta no contiene JSON válido:\n{texto}")
+            raise ValueError(
+                f"La respuesta no contiene JSON válido:\n{texto}"
+            )
 
-        return json.loads(texto[inicio:fin])
+        bloque = texto[inicio:fin]
+
+        # Corrige escapes inválidos generados por el modelo
+        bloque = bloque.replace("\\'", "'")
+        bloque = bloque.replace("\\\n", "\n")
+
+        return json.loads(bloque)
 
 
 def construir_contexto(contexto):
@@ -55,7 +64,12 @@ def pedir_groq_json(prompt, temperature=0.2):
                 "role": "system",
                 "content": (
                     "Eres un generador estricto de JSON válido. "
-                    "Nunca respondas con markdown, explicaciones ni texto fuera del JSON."
+                    "Devuelve únicamente JSON. "
+                    "No uses markdown ni explicaciones. "
+                    "No uses LaTeX. "
+                    "Las fórmulas deben escribirse en texto plano usando * para multiplicación. "
+                    "No agregues barra invertida antes de símbolos matemáticos."
+                    
                 )
             },
             {
@@ -67,8 +81,12 @@ def pedir_groq_json(prompt, temperature=0.2):
     )
 
     texto = response.choices[0].message.content.strip()
-    return parsear_json_seguro(texto)
 
+    print("========== RESPUESTA GROQ ==========")
+    print(texto)
+    print("====================================")
+
+    return parsear_json_seguro(texto)
 
 def pedir_groq_texto(prompt, temperature=0.2):
     response = client.chat.completions.create(
