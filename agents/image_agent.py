@@ -1,18 +1,15 @@
 import os
 import base64
-from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv()
 
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def generar_imagen(prompt):
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     response = client.images.generate(
         model="gpt-image-1",
         prompt=prompt,
-        size="1024x1024",
+        size="1024x1536",
         n=1
     )
 
