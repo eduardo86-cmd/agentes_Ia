@@ -7,10 +7,12 @@ from fastapi.responses import Response
 
 
 from orchestrator import(
+    generar_portada_orquestada,
     generar_contenido_orquestado,
     generar_actividades_orquestado,
     generar_detalle_orquestado,
-    generar_imagen_orquestada
+    generar_imagen_orquestada,
+    generar_imagen_portada_orquestada,
 )
 
 
@@ -56,6 +58,10 @@ class DatosActividad(BaseModel):
     nivel: str = ""
     descripcion: str = ""
 
+class DatosPortada(BaseModel):
+    categoria: str
+    titulo: str
+
 @app.get("/")
 def inicio():
     return {"message": "Backend IA Fisikapp funcionando"}
@@ -88,3 +94,15 @@ def generar_imagen_endpoint(datos: DatosActividad):
         content=imagen,
         media_type="image/png"
     )
+
+@app.post("/generar-portada")
+def generar_portada(datos: DatosPortada):
+    return generar_portada_orquestada(datos.dict())
+
+@app.post("/generar-imagen-portada")
+def generar_imagen_portada(datos: DatosPortada):
+    return {
+        "imagen": generar_imagen_portada_orquestada(
+            datos.dict()
+        )
+    }

@@ -1,5 +1,8 @@
 from agents.input_agent import preparar_entrada
 from agents.model_agent import buscar_contexto
+from agents.image_agent import (
+    generar_imagen,
+    generar_imagen_base64)
 
 from agents.groq_agent import (
     generar_detalle_con_groq,
@@ -8,16 +11,16 @@ from agents.groq_agent import (
     generar_prompt_visual_con_groq,
     generar_prompt_desde_procedimiento,
     filtrar_pasos_visuales,
-    generar_prompt_desde_pasos_visuales
+    generar_prompt_desde_pasos_visuales,
+    generar_portada_con_groq,
+    generar_prompt_portada,
+    
 )
 
 from agents.output_agent import (
     formatear_contenido,
     formatear_actividades
 )
-
-from agents.image_agent import generar_imagen
-
 
 def generar_contenido_orquestado(datos):
     datos_limpios = preparar_entrada(datos)
@@ -144,3 +147,40 @@ def generar_imagen_orquestada(datos):
     print("\n====================\n")
 
     return generar_imagen(prompt_visual)
+
+def generar_portada_orquestada(datos):
+    datos_limpios = preparar_entrada(datos)
+
+    fila, score = buscar_contexto(
+        datos_limpios["categoria"],
+        datos_limpios["titulo"]
+    )
+
+    if fila is None:
+        return {
+            "error": "No se encontró contexto suficiente en el dataset."
+        }
+
+    contexto = {
+        "resumen": fila.get("resumen", ""),
+        "introduccion": fila.get("introduccion", ""),
+        "marco_teorico": fila.get("marco_teorico", "")
+    }
+
+    portada = generar_portada_con_groq(
+        datos_limpios,
+        contexto
+    )
+
+    return portada
+
+def generar_imagen_portada_orquestada(datos):
+    datos_limpios = preparar_entrada(datos)
+
+    prompt_imagen = generar_prompt_portada(
+        datos_limpios
+    )
+
+    return generar_imagen_base64(
+        prompt_imagen
+    )

@@ -255,6 +255,70 @@ ESTRUCTURA EXACTA:
     return pedir_groq_json(prompt, temperature=0.2)
 
 
+def generar_portada_con_groq(datos, contexto):
+    prompt = f"""
+Eres un asistente académico especializado en física escolar para Fisikapp.
+
+Tu tarea es generar la información inicial de un laboratorio virtual.
+
+INSTRUCCIONES OBLIGATORIAS:
+
+- Usa el contexto del dataset como fuente principal de información.
+- Si el contexto no contiene suficiente información, puedes complementarla con conocimientos generales de física, siempre que sean correctos y coherentes con el tema.
+- Mantén siempre coherencia entre el título, la categoría y el contexto recuperado.
+- No cambies el tema principal del laboratorio.
+- No inventes conceptos que no pertenezcan al tema.
+- Utiliza un lenguaje académico, claro y apropiado para estudiantes.
+
+DESCRIPCIÓN CORTA:
+- Máximo 50 palabras.
+- Debe resumir el propósito del laboratorio.
+- Debe ser atractiva y fácil de entender.
+
+OBJETIVO GENERAL:
+- Debe comenzar con un verbo en infinitivo.
+- Debe expresar claramente qué aprenderá el estudiante.
+
+OBJETIVOS ESPECÍFICOS:
+- Genera exactamente cuatro.
+- Todos deben comenzar con un verbo en infinitivo.
+- Deben contribuir al cumplimiento del objetivo general.
+- No repitas ideas.
+- Ordénalos de forma lógica.
+
+{construir_contexto(contexto)}
+
+DATOS:
+
+Título:
+{datos.get("titulo", "")}
+
+Categoría:
+{datos.get("categoria", "")}
+
+SALIDA:
+
+Devuelve únicamente JSON válido.
+
+ESTRUCTURA EXACTA:
+
+{{
+    "descripcion_corta": "",
+    "objetivo_general": "",
+    "objetivos_especificos": [
+        "",
+        "",
+        "",
+        ""
+    ]
+}}
+"""
+
+    return pedir_groq_json(prompt, temperature=0.2)
+
+
+
+
 def prompt_hooke(datos):
     titulo = datos.get("titulo", "").lower()
     descripcion = datos.get("descripcion", "").lower()
@@ -276,6 +340,43 @@ def prompt_hooke(datos):
         )
 
     return None
+
+
+def generar_prompt_portada(datos):
+    titulo = datos.get("titulo", "")
+    categoria = datos.get("categoria", "")
+
+    return f"""
+Educational physics textbook cover.
+
+Topic:
+{titulo}
+
+Category:
+{categoria}
+
+Create a conceptual illustration representing the main physics topic.
+
+Style:
+Modern educational illustration.
+Professional science textbook cover.
+Clean laboratory environment.
+High quality.
+Realistic scientific equipment.
+Soft lighting.
+White or light background.
+
+Rules:
+- Represent only the main concept of the topic.
+- Do not show the experiment procedure.
+- Do not show steps.
+- Do not include text.
+- Do not include letters.
+- Do not include numbers.
+- Do not include labels.
+- No decorative objects.
+- Educational style.
+""".strip()
 
 
 def generar_prompt_imagen(datos):
