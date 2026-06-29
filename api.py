@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi.responses import Response
+from orchestrator import calificar_practica_orquestada
 
 
 from orchestrator import(
@@ -62,6 +63,24 @@ class DatosPortada(BaseModel):
     categoria: str
     titulo: str
 
+
+class DatosEvaluacion(BaseModel):
+    laboratorio_id: int
+    titulo: str
+    categoria: str
+    objetivo: str = ""
+    estudiante: str = ""
+    completed: bool
+    result_status: str
+    best_attempt: int
+    successful_attempts: int
+    failed_attempts: int
+    started_at: str
+    finished_at: str
+    respuestas: list
+    analisis_estudiante: str = ""
+    conclusiones: str = ""
+
 @app.get("/")
 def inicio():
     return {"message": "Backend IA Fisikapp funcionando"}
@@ -106,3 +125,10 @@ def generar_imagen_portada(datos: DatosPortada):
             datos.dict()
         )
     }
+
+@app.post("/calificar-practica")
+def calificar_practica(datos: DatosEvaluacion):
+
+    return calificar_practica_orquestada(
+        datos.dict()
+    )

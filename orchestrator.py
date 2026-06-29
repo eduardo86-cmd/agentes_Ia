@@ -1,5 +1,6 @@
-from agents.input_agent import preparar_entrada
+from agents.input_agent import (preparar_entrada,preparar_entrada_evaluacion)
 from agents.model_agent import buscar_contexto
+from agents.evaluation_agent import calificar_practica
 from agents.image_agent import (
     generar_imagen,
     generar_imagen_base64)
@@ -183,4 +184,22 @@ def generar_imagen_portada_orquestada(datos):
 
     return generar_imagen_base64(
         prompt_imagen
+    )
+
+def calificar_practica_orquestada(datos):
+
+    datos_limpios = preparar_entrada_evaluacion(datos)
+
+    if not datos_limpios["titulo"]:
+        return {
+            "error": "El laboratorio no tiene título."
+        }
+
+    if len(datos_limpios["respuestas"]) == 0:
+        return {
+            "error": "No se recibieron respuestas del estudiante."
+        }
+
+    return calificar_practica(
+        datos_limpios
     )

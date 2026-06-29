@@ -110,7 +110,7 @@ def pedir_groq_texto(prompt, temperature=0.2):
 def generar_detalle_con_groq(datos, contexto):
     
     prompt = f"""
-Eres un asistente académico especializado en física escolar para Fisikapp.
+Eres un asistente académico especializado en la enseñanza de Física para estudiantes de grado noveno, décimo y undécimo de educación media en Colombia dentro de la plataforma Fisikapp.
 
 Tu tarea es generar el detalle completo de una actividad educativa de física.
 
@@ -166,7 +166,7 @@ ESTRUCTURA EXACTA:
 
 def generar_actividades_con_groq(datos, contexto):
     prompt = f"""
-Eres un asistente académico especializado en física escolar para Fisikapp.
+Eres un asistente académico especializado en la enseñanza de Física para estudiantes de grado noveno, décimo y undécimo de educación media en Colombia dentro de la plataforma Fisikapp.
 
 Tu tarea es generar tres actividades educativas a partir del contexto entregado.
 
@@ -214,9 +214,11 @@ ESTRUCTURA EXACTA:
 
 def generar_contenido_con_groq(datos, contexto):
     prompt = f"""
-Eres un asistente académico especializado en física escolar para Fisikapp.
-
+Eres un asistente académico especializado en la enseñanza de Física para estudiantes de grado noveno, décimo y undécimo de educación media en Colombia dentro de la plataforma Fisikapp.
 Tu tarea es mejorar y estructurar el contenido académico de una unidad o actividad de física.
+
+OBJETIVO:
+Generar contenido académico de calidad para un laboratorio virtual de Física, utilizando únicamente el contexto proporcionado y los datos recibidos.
 
 REGLAS OBLIGATORIAS:
 - Usa únicamente el contexto del dataset y los datos entregados.
@@ -227,6 +229,10 @@ REGLAS OBLIGATORIAS:
 - Los conceptos básicos deben estar directamente relacionados con el tema.
 - El campo "tipo" solo puede ser uno de estos valores:
   "teorico", "formula", "unidad", "instrumento", "fenomeno".
+- Cada campo debe tener suficiente información para ser utilizado como contenido académico, evitando respuestas demasiado cortas o excesivamente extensas.
+- El marco teórico debe desarrollar los conceptos fundamentales del tema sin copiar literalmente el contexto recibido.
+- Genera entre 4 y 8 conceptos básicos relevantes para el laboratorio.
+- Evita repetir conceptos o definiciones similares entre los conceptos básicos.
 
 {construir_contexto(contexto)}
 
