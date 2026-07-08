@@ -19,16 +19,17 @@ La evaluación debe ser objetiva, pedagógica y enfocada en el aprendizaje del e
 Para realizar la evaluación debes considerar las siguientes competencias:
 
 - Comprensión de los conceptos físicos.
-- Aplicación de los conceptos durante la simulación.
+- Aplicación de los conceptos durante la práctica y, cuando exista, durante la simulación.
 - Interpretación y análisis de los resultados obtenidos.
 - Relación entre la teoría y la práctica.
 - Calidad, claridad y coherencia de las respuestas escritas.
 - Capacidad para resolver la actividad utilizando el método científico.
 
-No evalúes únicamente las respuestas escritas.
+No evalúes únicamente las observaciones o las conclusiones del estudiante.
 Si la práctica no fue completada o el resultado de la simulación indica dificultades, tenlo en cuenta al momento de asignar la calificación final, sin ignorar la calidad de las respuestas y del análisis realizado por el estudiante.
 
-También debes analizar el desempeño del estudiante durante la simulación teniendo en cuenta:
+Si el laboratorio incluye resultados de una simulación, incorpóralos en la evaluación.
+Si no existen datos de simulación, realiza la evaluación únicamente con la práctica desarrollada por el estudiante, utilizando las observaciones, los datos obtenidos y las conclusiones.
 
 - Si completó o no la práctica de laboratorio.
 - Mejor intento realizado.
@@ -58,13 +59,36 @@ Categoría:
 Objetivo del laboratorio:
 {datos["objetivo"]}
 
-Información de la simulación
+Información de la práctica
+
+Observaciones:
+
+{datos["observaciones"]}
+
+Datos obtenidos:
+
+{json.dumps(datos["datos_obtenidos"], indent=2, ensure_ascii=False)}
+
+Conclusiones:
+
+{datos["conclusiones"]}
+
+Información de la simulación (si aplica)
 
 Práctica completada:
 {datos["completed"]}
 
+Estado de la simulación:
+{datos["result_status"]}
+
 Mejor intento:
 {datos["best_attempt"]}
+
+Mejor distancia al objetivo:
+{datos["best_distance"]}
+
+Distancia promedio al objetivo:
+{datos["average_distance"]}
 
 Intentos exitosos:
 {datos["successful_attempts"]}
@@ -72,35 +96,22 @@ Intentos exitosos:
 Intentos fallidos:
 {datos["failed_attempts"]}
 
-Estado de la simulación:
-{datos["result_status"]}
-
 Hora de inicio:
 {datos["started_at"]}
 
 Hora de finalización:
 {datos["finished_at"]}
 
-Análisis del estudiante:
-{datos["analisis_estudiante"]}
-
-Conclusiones:
-{datos["conclusiones"]}
-
-Respuestas del estudiante:
-
-{json.dumps(datos["respuestas"], indent=2, ensure_ascii=False)}
-
 Calcula una calificación final entre 0.0 y 5.0.
 
 Para asignar la calificación debes considerar en conjunto:
 
 - Comprensión de los conceptos físicos.
-- Desarrollo de la simulación.
+- Desarrollo de la práctica.
 - Interpretación de los resultados.
 - Calidad de las respuestas escritas.
 
-No asignes la nota únicamente con base en las respuestas escritas; considera todo el desempeño del estudiante durante la práctica.
+No asignes la nota únicamente con base en las observaciones o conclusiones; considera toda la información disponible de la práctica y, cuando exista, de la simulación.
 
 Devuelve únicamente un objeto JSON con la siguiente estructura:
 

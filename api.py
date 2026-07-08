@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi.responses import Response
 from orchestrator import calificar_practica_orquestada
+from typing import Any
 
 
 from orchestrator import(
@@ -70,16 +71,22 @@ class DatosEvaluacion(BaseModel):
     categoria: str
     objetivo: str = ""
     estudiante: str = ""
-    completed: bool
-    result_status: str
-    best_attempt: int
-    successful_attempts: int
-    failed_attempts: int
-    started_at: str
-    finished_at: str
-    respuestas: list
-    analisis_estudiante: str = ""
+
+    # Práctica
+    observaciones: str = ""
+    datos_obtenidos: dict[str, Any] = {}
     conclusiones: str = ""
+
+    # Simulación (opcional)
+    completed: bool | None = None
+    result_status: str | None = None
+    best_attempt: int | None = None
+    best_distance: float | None = None
+    average_distance: float | None = None
+    successful_attempts: int | None = None
+    failed_attempts: int | None = None
+    started_at: str | None = None
+    finished_at: str | None = None
 
 @app.get("/")
 def inicio():

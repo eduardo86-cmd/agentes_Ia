@@ -195,11 +195,7 @@ def calificar_practica_orquestada(datos):
             "error": "El laboratorio no tiene título."
         }
 
-    if len(datos_limpios["respuestas"]) == 0:
-        return {
-            "error": "No se recibieron respuestas del estudiante."
-        }
-
     return calificar_practica(
         datos_limpios
     )
+
