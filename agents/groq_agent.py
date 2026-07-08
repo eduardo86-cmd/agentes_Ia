@@ -108,60 +108,102 @@ def pedir_groq_texto(prompt, temperature=0.2):
 
 
 def generar_detalle_con_groq(datos, contexto):
-    
+
     prompt = f"""
 Eres un asistente académico especializado en la enseñanza de Física para estudiantes de grado noveno, décimo y undécimo de educación media en Colombia dentro de la plataforma Fisikapp.
 
-Tu tarea es generar el detalle completo de una actividad educativa de física.
+Tu tarea es generar el contenido completo de UNA práctica de laboratorio de Física basada en la actividad seleccionada por el profesor.
 
-REGLAS OBLIGATORIAS:
+La información generada será almacenada directamente en la base de datos de Fisikapp, por lo tanto debes respetar exactamente la estructura JSON solicitada.
+
+==========================
+REGLAS OBLIGATORIAS
+==========================
+
 - Usa únicamente el contexto del dataset y los datos entregados.
 - No inventes conceptos que no estén relacionados con el tema.
-- No agregues fórmulas si el contexto no permite justificarlas.
-- El procedimiento debe ser claro, práctico y ordenado.
-- Los materiales deben ser realistas para una actividad escolar.
-- El lenguaje debe ser adecuado para estudiantes.
-- El tiempo estimado debe ser breve y realista.
-- Genera entre 3 y 5 fórmulas relacionadas con la actividad cuando el tema lo permita.
-- Para electricidad incluye Ley de Ohm, Potencia Eléctrica y despejes relevantes.
-- Para mecánica incluye las ecuaciones fundamentales relacionadas con la práctica.
-- Solo devuelve formulas vacías si realmente no existe ninguna fórmula asociada al tema.
+- No agregues información que no pueda justificarse con el contexto.
+- Utiliza un lenguaje claro, técnico y apropiado para estudiantes de educación media.
+- El objetivo debe ser claro, específico y medible.
+- La descripción debe explicar de manera breve en qué consiste la práctica.
+- El nombre de la práctica debe ser corto, descriptivo y relacionado con el tema del laboratorio.
+- Los materiales deben ser realistas y adecuados para una práctica escolar.
+- Los procedimientos deben estar organizados cronológicamente.
+- Cada procedimiento debe representar un único paso.
+- No numeres los procedimientos.
+- No escribas "Paso 1", "Paso 2", etc.
+- Cada elemento del arreglo "procedimientos" representa un paso independiente.
+- El campo "calculos" debe contener únicamente las operaciones matemáticas, ecuaciones o fórmulas que el estudiante deberá aplicar durante la práctica.
+- No describas el procedimiento experimental en el campo "calculos".
+- No repitas el objetivo ni la descripción en el campo "calculos".
+- Si la práctica requiere cálculos, explica brevemente qué operación realizará el estudiante.
+- Si la práctica no requiere cálculos, devuelve una cadena vacía ("").
+- Genera únicamente las fórmulas necesarias para desarrollar la práctica.
+- Si el tema requiere varias fórmulas, genera entre 1 y 5.
+- Si el tema no requiere fórmulas, devuelve un arreglo vacío [].
+- No cambies el nombre de ninguna clave.
+- No agregues claves adicionales.
+- No elimines ninguna clave.
+- No utilices Markdown.
+- No escribas ```json.
+- No agregues comentarios.
+- Devuelve únicamente un objeto JSON válido.
+
+==========================
+CONTEXTO
+==========================
 
 {construir_contexto(contexto)}
 
+==========================
+DATOS
+==========================
+
 {construir_datos(datos)}
 
-SALIDA:
-Devuelve únicamente JSON válido.
+==========================
+SALIDA
+==========================
 
-ESTRUCTURA EXACTA:
+Devuelve exactamente el siguiente formato JSON:
+
 {{
-  "objetivo_especifico": "",
-  "materiales": [],
-  "procedimiento": [],
-  "formulas": [
-    {{
-      "nombre": "",
-      "descripcion": "",
-      "expresion": ""
-    }},
-    {{
-      "nombre": "",
-      "descripcion": "",
-      "expresion": ""
-    }},
-    {{
-      "nombre": "",
-      "descripcion": "",
-      "expresion": ""
-    }}
-  ],
-  "tiempo_estimado": ""
+    "nombre_practica": "",
+    "objetivo": "",
+    "descripcion": "",
+    "materiales": [
+        ""
+    ],
+    "calculos": "",
+    "procedimientos": [
+        ""
+    ],
+    "formulas": [
+        {{
+            "nombre": "",
+            "descripcion": "",
+            "expresion": ""
+        }}
+    ]
 }}
+
+==========================
+IMPORTANTE
+==========================
+
+- "nombre_practica" debe ser un título corto y descriptivo relacionado con el tema del laboratorio.
+- "objetivo" debe indicar claramente qué aprenderá o comprobará el estudiante.
+- "descripcion" debe explicar brevemente en qué consiste la práctica.
+- "materiales" debe contener únicamente los materiales necesarios para realizar la práctica.
+- "calculos" debe describir únicamente las operaciones matemáticas o fórmulas que el estudiante aplicará durante la práctica. No debe contener pasos del procedimiento. Si no aplica, devolver una cadena vacía ("").
+- "procedimientos" debe contener únicamente los pasos experimentales de la práctica.
+- "formulas" debe contener únicamente las fórmulas necesarias para desarrollar la actividad.
+
+Recuerda: la respuesta será almacenada directamente en la base de datos de Fisikapp. Debes respetar exactamente la estructura JSON indicada y responder únicamente con un objeto JSON válido.
 """
     
-
     return pedir_groq_json(prompt, temperature=0.2)
+
 
 
 def generar_actividades_con_groq(datos, contexto):
