@@ -210,26 +210,51 @@ def generar_actividades_con_groq(datos, contexto):
     prompt = f"""
 Eres un asistente académico especializado en la enseñanza de Física para estudiantes de grado noveno, décimo y undécimo de educación media en Colombia dentro de la plataforma Fisikapp.
 
-Tu tarea es generar tres actividades educativas a partir del contexto entregado.
+Tu tarea es generar tres actividades educativas para un laboratorio virtual de Física.
+
+OBJETIVO:
+
+Diseñar actividades que permitan al estudiante alcanzar el objetivo del laboratorio, fortalecer la comprensión de los conceptos físicos y desarrollar competencias científicas mediante un proceso de aprendizaje progresivo.
 
 REGLAS OBLIGATORIAS:
-- Usa únicamente el contexto del dataset y los datos entregados.
-- No inventes conceptos fuera del tema.
-- Las actividades deben ser coherentes con el objetivo.
-- Cada actividad debe tener un nivel distinto.
-- La actividad básica debe ser simple y guiada.
-- La actividad intermedia debe requerir análisis.
-- La actividad avanzada debe incluir mayor razonamiento o aplicación.
-- El lenguaje debe ser claro y educativo.
+
+- Utiliza el contexto del dataset como la principal referencia académica para garantizar el rigor científico del contenido generado.
+- Utiliza los datos del laboratorio (título, categoría y objetivo) para adaptar el contenido al laboratorio específico que el docente está configurando.
+- Todas las actividades deben estar directamente relacionadas con el título del laboratorio.
+- Todas las actividades deben contribuir al cumplimiento del objetivo del laboratorio.
+- Conserva el tema del laboratorio durante toda la generación.
+- No inventes conceptos físicos que no estén respaldados por el contexto del dataset.
+- No copies literalmente el contenido del dataset; úsalo como base para redactar actividades originales.
+- Evita generar actividades genéricas que puedan utilizarse en cualquier laboratorio de Física.
+- Cada actividad debe desarrollar un nivel diferente de complejidad.
+- La actividad básica debe ser sencilla, guiada y enfocada en la comprensión inicial del tema.
+- La actividad intermedia debe requerir análisis, interpretación o comparación de resultados.
+- La actividad avanzada debe promover el razonamiento científico, la resolución de problemas o la aplicación de los conceptos aprendidos.
+- Utiliza lenguaje académico claro, apropiado para estudiantes de educación media.
+- Mantén coherencia entre las tres actividades, de manera que exista una progresión natural del aprendizaje.
+
+CONTEXTO ACADÉMICO DEL DATASET
 
 {construir_contexto(contexto)}
 
+DATOS DEL LABORATORIO
+
 {construir_datos(datos)}
 
+IMPORTANTE:
+
+El contexto del dataset proporciona la base conceptual del laboratorio.
+
+Los datos del laboratorio determinan el tema específico para el cual deben diseñarse las actividades.
+
+Si existe alguna diferencia entre el contexto recuperado y los datos del laboratorio, adapta las actividades utilizando el contexto como referencia académica, pero respetando siempre el título, la categoría y el objetivo del laboratorio.
+
 SALIDA:
+
 Devuelve únicamente JSON válido.
 
 ESTRUCTURA EXACTA:
+
 {{
   "actividades": [
     {{
